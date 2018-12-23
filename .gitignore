@@ -1,0 +1,11 @@
+.idea/
+*.iml
+IlluminatedCloud/
+deploy/
+config/
+debug/
+*.sublime*
+projectFilesBackup/
+out/
+node_modules/
+package-lock.json
