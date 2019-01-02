@@ -71,7 +71,7 @@ const changelogApp = {
 	setOptions: function(config){
 		//set the dynamic options
 		this.options.number = config.logSize,
-		this.options.author = config.user.name,
+		this.options.author = config.user,
 		this.options.execOptions = {
 			after: new Date() - 1
 		}
@@ -128,10 +128,9 @@ const writeLogToConsole = {
 const excelFileReader = {
 	readCurrentFile: function(){
 
-		var files = fs.readdirSync(__dirname);
-		for (var i in files) {
+		let files = fs.readdirSync(__dirname);
+		for (let i in files) {
 			if (files[i] === 'changelog.xlsx'){
-				console.log("found");
 				const file = xlsx.readFile('changelog.xlsx');
 				const worksheet = file.SheetNames;
 				return xlsx.utils.sheet_to_json(file.Sheets[worksheet[0]]);
@@ -158,7 +157,7 @@ const writeToExcel = {
 		this.ws.cell(1, 1).string("File Name");
 	},
 	reWriteExistingData: function(){
-		var self = this;
+		const self = this;
 		let existingData = excelFileReader.readCurrentFile();
 		if(existingData) {
 			existingData.forEach(function (data, i) {
@@ -170,11 +169,12 @@ const writeToExcel = {
 		}
 	},
 	execute: function(commits){
-		var self = this;
+		const self = this;
 		//Prints file names from each commit
 		commits.forEach(function (commit, i) {
 			commit.files.forEach(function (file, x) {
-				self.ws.cell(self.currentRow, 1).string(file);
+				let currentProcessedFile = file.split("/").pop();
+				self.ws.cell(self.currentRow, 1).string(currentProcessedFile);
 				self.incrementCurrentRow();
 			});
 		});
